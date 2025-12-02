@@ -1,6 +1,7 @@
 FROM debian:bookworm
 RUN apt update && apt upgrade -y && apt install -y mariadb-server
-COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/.
-COPY tools/init.sql /docker-entrypoint-initdb.d/.
-RUN mkdir /run/mysqld && chown -R mysql:mysql /run/mysqld
-ENTRYPOINT ["mysqld_safe"]
+COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/
+RUN mkdir /run/mysqld
+COPY tools/mariadb-run.sh .
+RUN chmod +x ./mariadb-run.sh
+ENTRYPOINT ["./mariadb-run.sh"]

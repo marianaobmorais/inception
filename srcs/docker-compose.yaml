@@ -1,16 +1,71 @@
+# Docker Compose configuration
+# Defines a multi-container environment. Each service runs
+# in its own isolated container but can communicate via networks
 services:
   nginx:
-    build: requirements/nginx/.
+    build:
+      context: requirements/nginx/
+      args:
+        - CRED_PATH
+        - CRED_CERT
+        - CRED_KEY
+        - COUNTRY
+        - STATE
+        - LOCALITY
+        - ORGANIZATION
+        - ORG_UNIT
+        - COMMON_NAME
     container_name: nginx
+    restart: on-failure
+    depends_on:
+      - wordpress
+    networks:
+      - inception
     ports:
-      - "80:80"
+      - "443:443"
     volumes:
-      - .web:/var/www/html
+      - v_web:/var/www/html
   wordpress:
-    build: requirements/wordpress/.
+    build: requirements/wordpress/
     container_name: wordpress
+    restart: on-failure
+    depends_on:
+      - mariadb
+    networks:
+      - inception
+    expose:
+      - "9000"
     volumes:
-      - .web:/var/www/html
+      - v_web:/var/www/html
+    env_file:
+      - .env
   mariadb:
-    build: requirements/mariadb/.
+    build: requirements/mariadb/
     container_name: mariadb
+    restart: on-failure
+    networks:
+      - inception
+    expose:
+      - "3306"
+    volumes:
+      - v_db:/var/lib/mysql
+    env_file:
+      - .env
+
+volumes:
+  v_web:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/mariaoli/data/wordpress
+  v_db:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/mariaoli/data/mariadb
+
+networks:
+  inception:
+    driver: bridge
