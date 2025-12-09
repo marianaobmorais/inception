@@ -17,11 +17,18 @@ build: data
 up: build
 	$(DOCKER_COMPOSE) up -d
 
+image:
+	docker image ls
+
 down:
 	$(DOCKER_COMPOSE) down
 
 ps:
 	$(DOCKER_COMPOSE) ps
+
+mariadb:
+	docker exec -it mariadb bash
+	# mysql -u root -p
 
 clean:
 	$(DOCKER_COMPOSE) down -v
@@ -34,4 +41,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all data build up down ps clean fclean re
+.PHONY: all data build up image down ps mariadb clean fclean re

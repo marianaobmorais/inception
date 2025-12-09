@@ -1,8 +1,6 @@
-# Docker Compose configuration
-# Defines a multi-container environment. Each service runs
-# in its own isolated container but can communicate via networks
 services:
   nginx:
+    image: nginx
     build:
       context: requirements/nginx/
       args:
@@ -31,6 +29,7 @@ services:
       timeout: 3s
       retries: 5
   wordpress:
+    image: wordpress
     build: requirements/wordpress/
     container_name: wordpress
     restart: on-failure
@@ -51,6 +50,7 @@ services:
       timeout: 3s
       retries: 10
   mariadb:
+    image: mariadb
     build: requirements/mariadb/
     container_name: mariadb
     restart: on-failure
