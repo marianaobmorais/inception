@@ -1,3 +1,5 @@
+NAME = inception
+
 DOCKER_COMPOSE_BIN = docker compose
 DOCKER_COMPOSE = $(DOCKER_COMPOSE_BIN) -f srcs/docker-compose.yaml
 
@@ -8,8 +10,7 @@ WP_DIR = $(DATA_DIR)/wordpress
 all: build
 
 data:
-	@mkdir -p $(MARIADB_DIR) $(WP_DIR)
-@sudo chown -R 1000:1000 $(MARIADB_DIR) $(WP_DIR) || true
+	mkdir -p $(MARIADB_DIR) $(WP_DIR)
 
 build: data
 	$(DOCKER_COMPOSE) build
@@ -27,17 +28,13 @@ ps:
 	$(DOCKER_COMPOSE) ps
 
 mariadb:
-	docker exec -it mariadb bash
-	# mysql -u root -p
+	docker exec -it mariadb mysql -u root -p
 
 clean:
-	$(DOCKER_COMPOSE) down -v
-	@echo "Cleaning dangling images..."
-	@docker image prune -f
+	$(DOCKER_COMPOSE) down --remove-orphans
 
 fclean: clean
-	@echo "Removing data directory..."
-	@sudo rm -rf $(DATA_DIR)
+	$(DOCKER_COMPOSE) down -v --rmi all --remove-orphans
 
 re: fclean all
 

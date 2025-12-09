@@ -8,13 +8,11 @@ GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%';
 FLUSH PRIVILEGES;
 EOF
 
-sleep 5
-
 # Ensure database directory exists
 mkdir -p /var/lib/mysql
 
 # Initialize database
-mariadb-install-db --user=mysql --ldata=/var/lib/mysql
+mariadb-install-db --ldata=/var/lib/mysql
 
 # Start mariadb using the init script
-exec mysqld --user=mysql --init-file=/etc/mysql/init.sql
+exec mysqld --init-file=/etc/mysql/init.sql
