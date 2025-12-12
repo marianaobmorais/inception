@@ -26,7 +26,7 @@ make up
 This command:
 - Builds all `Docker images` from custom `Dockerfiles`
 - Creates containers
-- Starts the infrastructure in `daemon` mode
+- Starts the infrastructure in `daemon` mode - runs in the background
 
 ## 2. Stopping the Project
 
