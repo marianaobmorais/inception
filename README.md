@@ -34,7 +34,7 @@ The entire setup was built from scratch using `Debian Bookworm` and custom confi
                          |   /etc/nginx/conf.d   |
                          +-----------+-----------+
                                      |
-                                     | FastCGI (internal-only)
+                                     | FastCGI 9000 (internal-only)
                                      |
                      +---------------▼---------------+
                      |      WordPress + PHP-FPM      |
